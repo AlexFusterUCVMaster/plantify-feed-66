@@ -61,7 +61,7 @@ const Index = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="flex items-center gap-3">
+          <div className="items-center justify-center flex flex-col gap-[12px] border-accent border-8 border-none shadow-lg">
             <div className="flex items-center gap-3">
               <Leaf className="h-9 w-9 text-secondary drop-shadow-sm" />
               <h1 className="text-3xl font-bold tracking-tight text-[#ab85b5] font-sans text-center my-0 mx-0">Plantify</h1>

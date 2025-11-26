@@ -27,7 +27,7 @@ const PlantCard = ({
       {/* Content overlay style */}
       <div className="p-5 space-y-4 bg-card/95 backdrop-blur-sm">
         {/* Header with user info */}
-        <div className="flex items-center gap-3">
+        <div className="gap-3 flex items-center justify-start">
           <Avatar className="h-11 w-11 border border-muted">
             <AvatarImage src={userAvatar} alt={username} />
             <AvatarFallback className="bg-muted text-muted-foreground text-sm">
