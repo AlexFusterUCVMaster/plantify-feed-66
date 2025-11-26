@@ -47,7 +47,7 @@ const PlantCard = ({
 
         {/* CTA Button */}
         <Link to={`/post/${id}`} className="block mt-6">
-          <Button variant="secondary" size="sm" className="w-full">
+          <Button variant="secondary" size="sm" className="w-full bg-accent shadow-md">
             Ver más
           </Button>
         </Link>
