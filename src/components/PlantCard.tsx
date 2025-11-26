@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 interface PlantCardProps {
@@ -40,6 +41,11 @@ const PlantCard = ({
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 font-light">
           {description}
         </p>
+
+        {/* CTA Button */}
+        <Button variant="secondary" size="sm" className="w-full">
+          Ver más
+        </Button>
 
         {/* Actions */}
         <div className="flex items-center gap-5 pt-2">
