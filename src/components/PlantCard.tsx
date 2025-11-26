@@ -13,47 +13,49 @@ interface PlantCardProps {
 
 const PlantCard = ({ username, userAvatar, plantImage, description, likes, comments }: PlantCardProps) => {
   return (
-    <Card className="overflow-hidden border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-      {/* Header with user info */}
-      <div className="p-4 flex items-center gap-3">
-        <Avatar className="h-10 w-10 border-2 border-primary">
-          <AvatarImage src={userAvatar} alt={username} />
-          <AvatarFallback className="bg-accent text-accent-foreground">
-            {username.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <span className="font-semibold text-foreground">{username}</span>
-      </div>
-
-      {/* Plant image */}
-      <div className="aspect-square overflow-hidden bg-muted">
+    <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 rounded-3xl bg-card">
+      {/* Plant image - hero size */}
+      <div className="aspect-[4/5] overflow-hidden bg-muted relative group">
         <img 
           src={plantImage} 
           alt={`Plant by ${username}`}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
-      {/* Actions */}
-      <div className="p-4 space-y-3">
-        <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-foreground hover:text-accent transition-colors group">
-            <Heart className="h-6 w-6 group-hover:fill-accent group-hover:scale-110 transition-all" />
-            <span className="text-sm font-medium">{likes}</span>
-          </button>
-          <button className="flex items-center gap-2 text-foreground hover:text-primary transition-colors group">
-            <MessageCircle className="h-6 w-6 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-medium">{comments}</span>
-          </button>
-          <button className="flex items-center gap-2 text-foreground hover:text-secondary transition-colors ml-auto group">
-            <Share2 className="h-6 w-6 group-hover:scale-110 transition-transform" />
-          </button>
+      {/* Content overlay style */}
+      <div className="p-5 space-y-4 bg-card/95 backdrop-blur-sm">
+        {/* Header with user info */}
+        <div className="flex items-center gap-3">
+          <Avatar className="h-11 w-11 border-2 border-secondary/30 shadow-sm">
+            <AvatarImage src={userAvatar} alt={username} />
+            <AvatarFallback className="bg-secondary text-secondary-foreground text-sm">
+              {username.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <span className="font-semibold text-foreground text-base">{username}</span>
         </div>
 
         {/* Description */}
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 font-light">
           {description}
         </p>
+
+        {/* Actions */}
+        <div className="flex items-center gap-5 pt-2">
+          <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
+            <Heart className="h-5 w-5 group-hover:fill-secondary group-hover:scale-110 transition-all" />
+            <span className="text-sm font-medium">{likes}</span>
+          </button>
+          <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
+            <MessageCircle className="h-5 w-5 group-hover:scale-110 transition-transform" />
+            <span className="text-sm font-medium">{comments}</span>
+          </button>
+          <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors ml-auto group">
+            <Share2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
       </div>
     </Card>
   );

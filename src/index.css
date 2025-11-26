@@ -8,11 +8,11 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Base colors - warm cream background */
-    --background: 45 60% 97%;
+    /* Base colors - warm natural background */
+    --background: 42 35% 96%;
     --foreground: 54 54% 20%;
 
-    /* Card styling */
+    /* Card styling - soft organic feel */
     --card: 0 0% 100%;
     --card-foreground: 54 54% 20%;
 
@@ -29,7 +29,7 @@ All colors MUST be HSL.
     --secondary-foreground: 45 60% 97%;
 
     /* Muted - Light backgrounds */
-    --muted: 43 40% 92%;
+    --muted: 43 25% 94%;
     --muted-foreground: 54 30% 45%;
 
     /* Accent - Purple */
@@ -40,12 +40,16 @@ All colors MUST be HSL.
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs */
-    --border: 43 30% 85%;
+    /* Borders and inputs - subtle natural tones */
+    --border: 43 20% 90%;
     --input: 43 30% 85%;
     --ring: 43 90% 68%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;
+    
+    /* Natural gradients and shadows */
+    --gradient-natural: linear-gradient(135deg, hsl(42 35% 96%), hsl(45 40% 98%));
+    --shadow-soft: 0 4px 20px -4px hsl(54 20% 60% / 0.15);
 
     --sidebar-background: 0 0% 98%;
 
@@ -112,5 +116,7 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(135deg, hsl(42 35% 96%), hsl(45 40% 98%));
+    background-attachment: fixed;
   }
 }

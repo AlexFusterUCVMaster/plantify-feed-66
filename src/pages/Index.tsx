@@ -57,22 +57,22 @@ const Index = () => {
     likes: 267,
     comments: 15
   }];
-  return <div className="min-h-screen bg-background">
+  return <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border backdrop-blur-sm bg-opacity-95">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <Leaf className="h-8 w-8 text-secondary" />
-              <h1 className="text-2xl font-bold text-foreground">Plantify</h1>
+            <div className="flex items-center gap-3">
+              <Leaf className="h-9 w-9 text-secondary drop-shadow-sm" />
+              <h1 className="text-3xl font-bold text-foreground tracking-tight">Plantify</h1>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 py-8 bg-[#f3f0f6]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {plantPosts.map(post => <PlantCard key={post.id} {...post} />)}
         </div>
       </main>
