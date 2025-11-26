@@ -1,6 +1,6 @@
 import PlantCard from "@/components/PlantCard";
+import { Leaf } from "lucide-react";
 import plant1 from "@/assets/plant1.jpg";
-import monsteraLogo from "@/assets/monstera-logo.png";
 import plant2 from "@/assets/plant2.jpg";
 import plant3 from "@/assets/plant3.jpg";
 import plant4 from "@/assets/plant4.jpg";
@@ -73,7 +73,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <img src={monsteraLogo} alt="Plantify" className="h-8 w-8" />
+              <Leaf className="h-8 w-8 text-secondary" />
               <h1 className="text-2xl font-bold text-foreground">Plantify</h1>
             </div>
           </div>
