@@ -1,4 +1,5 @@
 import PlantCard from "@/components/PlantCard";
+import NewsletterPopup from "@/components/NewsletterPopup";
 import { Leaf } from "lucide-react";
 import plant1 from "@/assets/plant1.jpg";
 import plant2 from "@/assets/plant2.jpg";
@@ -64,6 +65,8 @@ const Index = () => {
     comments: 15
   }];
   return <div className="min-h-screen">
+      <NewsletterPopup />
+      
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-5">
