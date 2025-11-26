@@ -64,14 +64,14 @@ const Index = () => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3">
               <Leaf className="h-9 w-9 text-secondary drop-shadow-sm" />
-              <h1 className="text-3xl font-bold text-foreground tracking-tight">Plantify</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-[#ab85b5] font-sans text-center my-0 mx-0">Plantify</h1>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12 border-secondary-foreground">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {plantPosts.map(post => <PlantCard key={post.id} {...post} />)}
         </div>
