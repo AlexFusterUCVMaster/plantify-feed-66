@@ -19,7 +19,7 @@ const PlantCard = ({
 }: PlantCardProps) => {
   return <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 rounded-t-none rounded-b-lg bg-inherit">
       {/* Plant image - hero size */}
-      <div className="aspect-[4/5] bg-muted relative my-0 mb-4">
+      <div className="aspect-[4/5] bg-muted relative my-0 mb-8">
         <img src={plantImage} alt={`Plant by ${username}`} className="w-full h-full object-cover" />
       </div>
 
