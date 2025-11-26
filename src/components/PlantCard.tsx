@@ -28,9 +28,9 @@ const PlantCard = ({
       <div className="p-5 space-y-4 bg-card/95 backdrop-blur-sm">
         {/* Header with user info */}
         <div className="flex items-center gap-3">
-          <Avatar className="h-11 w-11 border-2 border-secondary/30 shadow-sm">
+          <Avatar className="h-11 w-11 border border-muted">
             <AvatarImage src={userAvatar} alt={username} />
-            <AvatarFallback className="bg-secondary text-secondary-foreground text-sm">
+            <AvatarFallback className="bg-muted text-muted-foreground text-sm">
               {username.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
