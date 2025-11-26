@@ -41,7 +41,7 @@ const PlantCard = ({
         </div>
 
         {/* Description */}
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 font-light">
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 font-light mb-4">
           {description}
         </p>
 
