@@ -2,7 +2,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { Link } from "react-router-dom";
 interface PlantCardProps {
+  id: number;
   username: string;
   userAvatar: string;
   plantImage: string;
@@ -11,6 +13,7 @@ interface PlantCardProps {
   comments: number;
 }
 const PlantCard = ({
+  id,
   username,
   userAvatar,
   plantImage,
@@ -43,9 +46,11 @@ const PlantCard = ({
         </p>
 
         {/* CTA Button */}
-        <Button variant="secondary" size="sm" className="w-full">
-          Ver más
-        </Button>
+        <Link to={`/post/${id}`}>
+          <Button variant="secondary" size="sm" className="w-full">
+            Ver más
+          </Button>
+        </Link>
 
         {/* Actions */}
         <div className="flex items-center gap-5 pt-2">
