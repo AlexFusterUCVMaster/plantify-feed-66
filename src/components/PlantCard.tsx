@@ -16,9 +16,8 @@ const PlantCard = ({ username, userAvatar, plantImage, description, likes, comme
     <Card className="overflow-hidden border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* Header with user info */}
       <div className="p-4 flex items-center gap-3">
-        <Avatar className="h-10 w-10 border-2 border-primary">
-          <AvatarImage src={userAvatar} alt={username} />
-          <AvatarFallback className="bg-accent text-accent-foreground">
+        <Avatar className="h-10 w-10">
+          <AvatarFallback className="bg-accent text-white font-semibold">
             {username.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
