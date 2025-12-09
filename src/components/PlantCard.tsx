@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
 interface PlantCardProps {
-  id: number;
+  id: string;
   username: string;
   userAvatar: string;
   plantImage: string;
