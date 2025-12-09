@@ -1,6 +1,9 @@
+import { Link } from "react-router-dom";
 import PlantCard from "@/components/PlantCard";
 // import NewsletterPopup from "@/components/NewsletterPopup";
-import { Leaf } from "lucide-react";
+import { Leaf, LogIn, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import plant1 from "@/assets/plant1.jpg";
 import plant2 from "@/assets/plant2.jpg";
 import plant3 from "@/assets/plant3.jpg";
@@ -13,7 +16,9 @@ import avatarSofia from "@/assets/avatar-sofia.jpg";
 import avatarCarlos from "@/assets/avatar-carlos.jpg";
 import avatarAna from "@/assets/avatar-ana.jpg";
 import avatarLuis from "@/assets/avatar-luis.jpg";
+
 const Index = () => {
+  const { user, signOut } = useAuth();
   // Mock data for plant posts
   const plantPosts = [{
     id: 1,
@@ -70,10 +75,35 @@ const Index = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="items-center justify-center gap-[12px] border-accent border-8 border-none flex flex-col shadow-none">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Leaf className="h-9 w-9 text-secondary drop-shadow-sm" />
-              <h1 className="text-3xl font-bold tracking-tight text-[#ab85b5] font-sans text-center my-0 mx-0">Plantify</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-accent font-sans">Plantify</h1>
+            </div>
+            <div>
+              {user ? (
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => signOut()}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Salir
+                </Button>
+              ) : (
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  size="sm"
+                  className="border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground"
+                >
+                  <Link to="/auth">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Entrar
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>
