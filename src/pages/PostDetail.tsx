@@ -1,148 +1,82 @@
 import { useParams, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Heart, MessageCircle, Share2, ArrowLeft, Send, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "@/hooks/use-toast";
-import { formatDistanceToNow } from "date-fns";
-import { es } from "date-fns/locale";
-
-interface Post {
-  id: string;
-  image_url: string;
-  description: string | null;
-  created_at: string;
-  user_id: string;
-  username: string;
-  avatar_url: string | null;
-}
-
-interface Comment {
-  id: string;
-  content: string;
-  created_at: string;
-  user_id: string;
-  username: string;
-  avatar_url: string | null;
-}
+import { Heart, MessageCircle, Share2, ArrowLeft } from "lucide-react";
+import plant1 from "@/assets/plant1.jpg";
+import plant2 from "@/assets/plant2.jpg";
+import plant3 from "@/assets/plant3.jpg";
+import plant4 from "@/assets/plant4.jpg";
+import plant5 from "@/assets/plant5.jpg";
+import plant6 from "@/assets/plant6.jpg";
+import avatarMaria from "@/assets/avatar-maria.jpg";
+import avatarAlex from "@/assets/avatar-alex.jpg";
+import avatarSofia from "@/assets/avatar-sofia.jpg";
+import avatarCarlos from "@/assets/avatar-carlos.jpg";
+import avatarAna from "@/assets/avatar-ana.jpg";
+import avatarLuis from "@/assets/avatar-luis.jpg";
 
 const PostDetail = () => {
   const { id } = useParams();
-  const { user } = useAuth();
-  const [post, setPost] = useState<Post | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [newComment, setNewComment] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
-  const fetchPost = async () => {
-    if (!id) return;
-
-    const { data: postData, error: postError } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("id", id)
-      .maybeSingle();
-
-    if (postError || !postData) {
-      setLoading(false);
-      return;
+  // Mock data (same as Index page)
+  const plantPosts = [
+    {
+      id: 1,
+      username: "greenthumb_maria",
+      userAvatar: avatarMaria,
+      plantImage: plant1,
+      description: "Mi monstera deliciosa finalmente está sacando una nueva hoja fenestrada. Después de meses de cuidados y paciencia, ver este progreso es increíblemente gratificante. Las plantas nos enseñan a ser pacientes.",
+      likes: 234,
+      comments: 18
+    },
+    {
+      id: 2,
+      username: "urban_jungle_alex",
+      userAvatar: avatarAlex,
+      plantImage: plant2,
+      description: "Colección de suculentas en mi ventana soleada. Me encanta cómo cada una tiene su propia personalidad y ritmo de crecimiento. Estas pequeñas bellezas son perfectas para espacios reducidos.",
+      likes: 189,
+      comments: 12
+    },
+    {
+      id: 3,
+      username: "botanical_sofia",
+      userAvatar: avatarSofia,
+      plantImage: plant3,
+      description: "Mi filodendro Pink Princess mostrando ese color rosa perfecto. La iluminación indirecta brillante ha sido clave para mantener esa pigmentación vibrante. Es una de mis plantas más apreciadas de la colección.",
+      likes: 412,
+      comments: 31
+    },
+    {
+      id: 4,
+      username: "plant_dad_carlos",
+      userAvatar: avatarCarlos,
+      plantImage: plant4,
+      description: "Acabo de trasplantar mi pothos dorado a una maceta más grande. Las raíces estaban perfectamente sanas. Siempre es emocionante darles más espacio para crecer y prosperar.",
+      likes: 156,
+      comments: 9
+    },
+    {
+      id: 5,
+      username: "nature_lover_ana",
+      userAvatar: avatarAna,
+      plantImage: plant5,
+      description: "Mi jardín de hierbas aromáticas en la cocina está floreciendo. Albahaca, romero y menta fresca al alcance de la mano para cocinar. Nada supera el sabor de las hierbas cultivadas en casa.",
+      likes: 298,
+      comments: 22
+    },
+    {
+      id: 6,
+      username: "green_space_luis",
+      userAvatar: avatarLuis,
+      plantImage: plant6,
+      description: "Esta calathea orbifolia tiene las hojas más impresionantes. El patrón de rayas plateadas es simplemente hipnotizante. Mantener la humedad alta ha sido el secreto de su éxito.",
+      likes: 267,
+      comments: 15
     }
+  ];
 
-    // Fetch profile for the post author
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("username, avatar_url")
-      .eq("user_id", postData.user_id)
-      .maybeSingle();
-
-    setPost({
-      ...postData,
-      username: profileData?.username || "Usuario",
-      avatar_url: profileData?.avatar_url || null,
-    });
-
-    setLoading(false);
-  };
-
-  const fetchComments = async () => {
-    if (!id) return;
-
-    const { data: commentsData, error } = await supabase
-      .from("comments")
-      .select("*")
-      .eq("post_id", id)
-      .order("created_at", { ascending: true });
-
-    if (error || !commentsData) return;
-
-    // Fetch profiles for comment authors
-    const userIds = [...new Set(commentsData.map((c) => c.user_id))];
-    const { data: profilesData } = await supabase
-      .from("profiles")
-      .select("user_id, username, avatar_url")
-      .in("user_id", userIds);
-
-    const profilesMap = new Map(profilesData?.map((p) => [p.user_id, p]) || []);
-
-    const commentsWithProfiles: Comment[] = commentsData.map((comment) => ({
-      id: comment.id,
-      content: comment.content,
-      created_at: comment.created_at,
-      user_id: comment.user_id,
-      username: profilesMap.get(comment.user_id)?.username || "Usuario",
-      avatar_url: profilesMap.get(comment.user_id)?.avatar_url || null,
-    }));
-
-    setComments(commentsWithProfiles);
-  };
-
-  useEffect(() => {
-    fetchPost();
-    fetchComments();
-  }, [id]);
-
-  const handleSubmitComment = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!user || !id || !newComment.trim()) return;
-
-    setSubmitting(true);
-
-    const { error } = await supabase.from("comments").insert({
-      post_id: id,
-      user_id: user.id,
-      content: newComment.trim(),
-    });
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo publicar el comentario",
-        variant: "destructive",
-      });
-    } else {
-      setNewComment("");
-      fetchComments();
-      toast({
-        title: "Comentario publicado",
-        description: "Tu comentario ha sido añadido",
-      });
-    }
-
-    setSubmitting(false);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
+  const post = plantPosts.find((p) => p.id === Number(id));
 
   if (!post) {
     return (
@@ -177,26 +111,21 @@ const PostDetail = () => {
           {/* User info */}
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16 border-2 border-muted">
-              <AvatarImage src={post.avatar_url || ""} alt={post.username} />
+              <AvatarImage src={post.userAvatar} alt={post.username} />
               <AvatarFallback className="bg-muted text-muted-foreground text-lg">
                 {post.username.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
               <h2 className="text-xl font-semibold text-foreground">{post.username}</h2>
-              <p className="text-sm text-muted-foreground">
-                {formatDistanceToNow(new Date(post.created_at), {
-                  addSuffix: true,
-                  locale: es,
-                })}
-              </p>
+              <p className="text-sm text-muted-foreground">Publicado hace 2 horas</p>
             </div>
           </div>
 
           {/* Plant image */}
           <div className="aspect-[4/3] rounded-lg overflow-hidden bg-muted">
             <img
-              src={post.image_url}
+              src={post.plantImage}
               alt={`Plant by ${post.username}`}
               className="w-full h-full object-cover"
             />
@@ -206,11 +135,11 @@ const PostDetail = () => {
           <div className="flex items-center gap-6 py-2">
             <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
               <Heart className="h-6 w-6 group-hover:fill-secondary group-hover:scale-110 transition-all" />
-              <span className="text-base font-medium">0</span>
+              <span className="text-base font-medium">{post.likes}</span>
             </button>
             <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
               <MessageCircle className="h-6 w-6 group-hover:scale-110 transition-transform" />
-              <span className="text-base font-medium">{comments.length}</span>
+              <span className="text-base font-medium">{post.comments}</span>
             </button>
             <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors ml-auto group">
               <Share2 className="h-6 w-6 group-hover:scale-110 transition-transform" />
@@ -218,91 +147,17 @@ const PostDetail = () => {
           </div>
 
           {/* Description */}
-          {post.description && (
-            <div className="prose prose-sm max-w-none">
-              <p className="text-foreground leading-relaxed">{post.description}</p>
-            </div>
-          )}
+          <div className="prose prose-sm max-w-none">
+            <p className="text-foreground leading-relaxed">{post.description}</p>
+          </div>
 
-          {/* Comments section */}
+          {/* Comments section placeholder */}
           <div className="pt-8 border-t border-border">
-            <h3 className="text-lg font-semibold mb-4">
-              Comentarios ({comments.length})
-            </h3>
-
-            {/* Comment form */}
-            {user ? (
-              <form onSubmit={handleSubmitComment} className="mb-6">
-                <div className="flex gap-3">
-                  <Textarea
-                    placeholder="Escribe un comentario..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="resize-none"
-                    rows={2}
-                  />
-                  <Button
-                    type="submit"
-                    size="icon"
-                    disabled={submitting || !newComment.trim()}
-                    className="shrink-0"
-                  >
-                    {submitting ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Send className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </form>
-            ) : (
-              <div className="mb-6 p-4 bg-muted/50 rounded-lg text-center">
-                <p className="text-muted-foreground text-sm">
-                  <Link to="/auth" className="text-secondary hover:underline">
-                    Inicia sesión
-                  </Link>{" "}
-                  para comentar
-                </p>
-              </div>
-            )}
-
-            {/* Comments list */}
-            {comments.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p>Sé el primero en comentar</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {comments.map((comment) => (
-                  <div key={comment.id} className="flex gap-3">
-                    <Avatar className="h-10 w-10 shrink-0">
-                      <AvatarImage
-                        src={comment.avatar_url || ""}
-                        alt={comment.username}
-                      />
-                      <AvatarFallback className="bg-muted text-muted-foreground text-sm">
-                        {comment.username.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 bg-muted/30 rounded-lg p-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-sm">
-                          {comment.username}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.created_at), {
-                            addSuffix: true,
-                            locale: es,
-                          })}
-                        </span>
-                      </div>
-                      <p className="text-sm text-foreground">{comment.content}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <h3 className="text-lg font-semibold mb-4">Comentarios ({post.comments})</h3>
+            <div className="text-center py-8 text-muted-foreground">
+              <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p>Los comentarios aparecerán aquí</p>
+            </div>
           </div>
         </div>
       </main>
