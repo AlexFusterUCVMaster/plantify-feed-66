@@ -91,7 +91,7 @@ const Index = () => {
           description,
           created_at,
           user_id,
-          profiles!posts_user_id_fkey (
+          profiles!posts_user_id_profiles_fkey (
             username,
             avatar_url
           )
