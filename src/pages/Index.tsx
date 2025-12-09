@@ -1,24 +1,54 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import PlantCard from "@/components/PlantCard";
-// import NewsletterPopup from "@/components/NewsletterPopup";
+import { CreatePostDialog } from "@/components/CreatePostDialog";
 import { Leaf, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import plant1 from "@/assets/plant1.jpg";
-import plant2 from "@/assets/plant2.jpg";
-import plant3 from "@/assets/plant3.jpg";
-import plant4 from "@/assets/plant4.jpg";
-import plant5 from "@/assets/plant5.jpg";
-import plant6 from "@/assets/plant6.jpg";
-import avatarMaria from "@/assets/avatar-maria.jpg";
-import avatarAlex from "@/assets/avatar-alex.jpg";
-import avatarSofia from "@/assets/avatar-sofia.jpg";
-import avatarCarlos from "@/assets/avatar-carlos.jpg";
-import avatarAna from "@/assets/avatar-ana.jpg";
-import avatarLuis from "@/assets/avatar-luis.jpg";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Post {
+  id: string;
+  image_url: string;
+  description: string | null;
+  created_at: string;
+  user_id: string;
+  profiles: {
+    username: string;
+    avatar_url: string | null;
+  } | null;
+}
 
 const Index = () => {
   const { user, signOut } = useAuth();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPosts = async () => {
+    const { data, error } = await supabase
+      .from('posts')
+      .select(`
+        id,
+        image_url,
+        description,
+        created_at,
+        user_id,
+        profiles!posts_user_id_fkey (
+          username,
+          avatar_url
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setPosts(data as Post[]);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   // Mock data for plant posts
   const plantPosts = [{
     id: 1,
