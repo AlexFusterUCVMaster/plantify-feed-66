@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import PlantCard from "@/components/PlantCard";
-// import NewsletterPopup from "@/components/NewsletterPopup";
+import CreatePostForm from "@/components/CreatePostForm";
 import { Leaf, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import plant1 from "@/assets/plant1.jpg";
 import plant2 from "@/assets/plant2.jpg";
 import plant3 from "@/assets/plant3.jpg";
@@ -17,61 +19,106 @@ import avatarCarlos from "@/assets/avatar-carlos.jpg";
 import avatarAna from "@/assets/avatar-ana.jpg";
 import avatarLuis from "@/assets/avatar-luis.jpg";
 
-const Index = () => {
-  const { user, signOut } = useAuth();
-  // Mock data for plant posts
-  const plantPosts = [{
-    id: 1,
+// Mock data for demo posts
+const mockPosts = [
+  {
+    id: "mock-1",
     username: "greenthumb_maria",
     userAvatar: avatarMaria,
     plantImage: plant1,
     description: "Mi monstera deliciosa finalmente está sacando una nueva hoja fenestrada. Después de meses de cuidados y paciencia, ver este progreso es increíblemente gratificante. Las plantas nos enseñan a ser pacientes.",
     likes: 234,
     comments: 18
-  }, {
-    id: 2,
+  },
+  {
+    id: "mock-2",
     username: "urban_jungle_alex",
     userAvatar: avatarAlex,
     plantImage: plant2,
     description: "Colección de suculentas en mi ventana soleada. Me encanta cómo cada una tiene su propia personalidad y ritmo de crecimiento. Estas pequeñas bellezas son perfectas para espacios reducidos.",
     likes: 189,
     comments: 12
-  }, {
-    id: 3,
+  },
+  {
+    id: "mock-3",
     username: "botanical_sofia",
     userAvatar: avatarSofia,
     plantImage: plant3,
     description: "Mi filodendro Pink Princess mostrando ese color rosa perfecto. La iluminación indirecta brillante ha sido clave para mantener esa pigmentación vibrante. Es una de mis plantas más apreciadas de la colección.",
     likes: 412,
     comments: 31
-  }, {
-    id: 4,
+  },
+  {
+    id: "mock-4",
     username: "plant_dad_carlos",
     userAvatar: avatarCarlos,
     plantImage: plant4,
     description: "Acabo de trasplantar mi pothos dorado a una maceta más grande. Las raíces estaban perfectamente sanas. Siempre es emocionante darles más espacio para crecer y prosperar.",
     likes: 156,
     comments: 9
-  }, {
-    id: 5,
+  },
+  {
+    id: "mock-5",
     username: "nature_lover_ana",
     userAvatar: avatarAna,
     plantImage: plant5,
     description: "Mi jardín de hierbas aromáticas en la cocina está floreciendo. Albahaca, romero y menta fresca al alcance de la mano para cocinar. Nada supera el sabor de las hierbas cultivadas en casa.",
     likes: 298,
     comments: 22
-  }, {
-    id: 6,
+  },
+  {
+    id: "mock-6",
     username: "green_space_luis",
     userAvatar: avatarLuis,
     plantImage: plant6,
     description: "Esta calathea orbifolia tiene las hojas más impresionantes. El patrón de rayas plateadas es simplemente hipnotizante. Mantener la humedad alta ha sido el secreto de su éxito.",
     likes: 267,
     comments: 15
-  }];
-  return <div className="min-h-screen">
-      {/* <NewsletterPopup /> */}
+  }
+];
+
+const Index = () => {
+  const { user, signOut } = useAuth();
+  
+  const { data: dbPosts = [], refetch } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select(`
+          id,
+          image_url,
+          description,
+          created_at,
+          user_id,
+          profiles!posts_user_id_fkey (
+            username,
+            avatar_url
+          )
+        `)
+        .order("created_at", { ascending: false });
       
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Combine real posts with mock posts (real posts first)
+  const allPosts = [
+    ...dbPosts.map((post: any) => ({
+      id: post.id,
+      username: post.profiles?.username || "Usuario",
+      userAvatar: post.profiles?.avatar_url || "",
+      plantImage: post.image_url,
+      description: post.description || "",
+      likes: 0,
+      comments: 0,
+    })),
+    ...mockPosts,
+  ];
+
+  return (
+    <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-5">
@@ -111,10 +158,17 @@ const Index = () => {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-6 py-12 border-secondary-foreground">
+        {/* Create post form - only visible when logged in */}
+        {user && <CreatePostForm onPostCreated={() => refetch()} />}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {plantPosts.map(post => <PlantCard key={post.id} {...post} />)}
+          {allPosts.map((post) => (
+            <PlantCard key={post.id} {...post} />
+          ))}
         </div>
       </main>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
