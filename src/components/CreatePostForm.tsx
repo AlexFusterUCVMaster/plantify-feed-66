@@ -96,18 +96,25 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
 
       if (postError) throw postError;
 
-      // Call edge function to generate AI description and notify users
-      supabase.functions.invoke("process-new-post", {
+      toast.success("¡Publicación creada! Generando descripción con IA...");
+      resetForm();
+      setIsOpen(false);
+
+      // Wait for edge function to generate AI description and notify users
+      const { error: fnError } = await supabase.functions.invoke("process-new-post", {
         body: {
           imageUrl: urlData.publicUrl,
           postId: postData.id,
           userId: user.id,
         },
-      }).catch((err) => console.error("Error processing post:", err));
+      });
 
-      toast.success("¡Publicación creada exitosamente!");
-      resetForm();
-      setIsOpen(false);
+      if (fnError) {
+        console.error("Error processing post:", fnError);
+      } else {
+        toast.success("¡Descripción generada con IA!");
+      }
+
       onPostCreated();
     } catch (error: any) {
       console.error("Error creating post:", error);
