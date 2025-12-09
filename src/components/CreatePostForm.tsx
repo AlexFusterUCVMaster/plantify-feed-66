@@ -84,15 +84,26 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
         .from("post-images")
         .getPublicUrl(fileName);
 
-      const { error: postError } = await supabase
+      const { data: postData, error: postError } = await supabase
         .from("posts")
         .insert({
           user_id: user.id,
           image_url: urlData.publicUrl,
           description: description.trim() || null,
-        });
+        })
+        .select()
+        .single();
 
       if (postError) throw postError;
+
+      // Call edge function to generate AI description and notify users
+      supabase.functions.invoke("process-new-post", {
+        body: {
+          imageUrl: urlData.publicUrl,
+          postId: postData.id,
+          userId: user.id,
+        },
+      }).catch((err) => console.error("Error processing post:", err));
 
       toast.success("¡Publicación creada exitosamente!");
       resetForm();

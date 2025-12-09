@@ -1,1 +1,4 @@
 project_id = "czsqhpplsdatwjmrbnxl"
+
+[functions.process-new-post]
+verify_jwt = true
