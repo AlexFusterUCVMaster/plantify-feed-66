@@ -1,0 +1,4 @@
+-- Crear FK de comments hacia profiles
+ALTER TABLE public.comments 
+ADD CONSTRAINT comments_user_id_profiles_fkey 
+FOREIGN KEY (user_id) REFERENCES public.profiles(user_id) ON DELETE CASCADE;

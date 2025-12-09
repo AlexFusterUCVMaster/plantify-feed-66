@@ -1,27 +1,29 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { MessageCircle, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import LikeButton from "@/components/LikeButton";
+
 interface PlantCardProps {
   id: string;
   username: string;
   userAvatar: string;
   plantImage: string;
   description: string;
-  likes: number;
-  comments: number;
+  commentsCount: number;
 }
+
 const PlantCard = ({
   id,
   username,
   userAvatar,
   plantImage,
   description,
-  likes,
-  comments
+  commentsCount
 }: PlantCardProps) => {
-  return <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 rounded-t-none rounded-b-lg bg-inherit">
+  return (
+    <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 rounded-t-none rounded-b-lg bg-inherit">
       {/* Plant image - hero size */}
       <div className="aspect-[4/5] bg-muted relative my-0 mb-8">
         <img src={plantImage} alt={`Plant by ${username}`} className="w-full h-full object-cover" />
@@ -54,19 +56,18 @@ const PlantCard = ({
 
         {/* Actions */}
         <div className="flex items-center gap-5 pt-2">
-          <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
-            <Heart className="h-5 w-5 group-hover:fill-secondary group-hover:scale-110 transition-all" />
-            <span className="text-sm font-medium">{likes}</span>
-          </button>
-          <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
+          <LikeButton postId={id} />
+          <Link to={`/post/${id}`} className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors group">
             <MessageCircle className="h-5 w-5 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-medium">{comments}</span>
-          </button>
+            <span className="text-sm font-medium">{commentsCount}</span>
+          </Link>
           <button className="flex items-center gap-2 text-foreground/70 hover:text-secondary transition-colors ml-auto group">
             <Share2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
           </button>
         </div>
       </div>
-    </Card>;
+    </Card>
+  );
 };
+
 export default PlantCard;
