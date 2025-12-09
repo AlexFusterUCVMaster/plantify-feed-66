@@ -40,7 +40,7 @@ const CommentSection = ({ postId, postOwnerId }: CommentSectionProps) => {
         content,
         created_at,
         user_id,
-        profiles!comments_user_id_fkey (
+        profiles!comments_user_id_profiles_fkey (
           username,
           avatar_url
         )

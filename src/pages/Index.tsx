@@ -27,8 +27,7 @@ const mockPosts = [
     userAvatar: avatarMaria,
     plantImage: plant1,
     description: "Mi monstera deliciosa finalmente está sacando una nueva hoja fenestrada. Después de meses de cuidados y paciencia, ver este progreso es increíblemente gratificante. Las plantas nos enseñan a ser pacientes.",
-    likes: 234,
-    comments: 18
+    commentsCount: 18
   },
   {
     id: "mock-2",
@@ -36,8 +35,7 @@ const mockPosts = [
     userAvatar: avatarAlex,
     plantImage: plant2,
     description: "Colección de suculentas en mi ventana soleada. Me encanta cómo cada una tiene su propia personalidad y ritmo de crecimiento. Estas pequeñas bellezas son perfectas para espacios reducidos.",
-    likes: 189,
-    comments: 12
+    commentsCount: 12
   },
   {
     id: "mock-3",
@@ -45,8 +43,7 @@ const mockPosts = [
     userAvatar: avatarSofia,
     plantImage: plant3,
     description: "Mi filodendro Pink Princess mostrando ese color rosa perfecto. La iluminación indirecta brillante ha sido clave para mantener esa pigmentación vibrante. Es una de mis plantas más apreciadas de la colección.",
-    likes: 412,
-    comments: 31
+    commentsCount: 31
   },
   {
     id: "mock-4",
@@ -54,8 +51,7 @@ const mockPosts = [
     userAvatar: avatarCarlos,
     plantImage: plant4,
     description: "Acabo de trasplantar mi pothos dorado a una maceta más grande. Las raíces estaban perfectamente sanas. Siempre es emocionante darles más espacio para crecer y prosperar.",
-    likes: 156,
-    comments: 9
+    commentsCount: 9
   },
   {
     id: "mock-5",
@@ -63,8 +59,7 @@ const mockPosts = [
     userAvatar: avatarAna,
     plantImage: plant5,
     description: "Mi jardín de hierbas aromáticas en la cocina está floreciendo. Albahaca, romero y menta fresca al alcance de la mano para cocinar. Nada supera el sabor de las hierbas cultivadas en casa.",
-    likes: 298,
-    comments: 22
+    commentsCount: 22
   },
   {
     id: "mock-6",
@@ -72,8 +67,7 @@ const mockPosts = [
     userAvatar: avatarLuis,
     plantImage: plant6,
     description: "Esta calathea orbifolia tiene las hojas más impresionantes. El patrón de rayas plateadas es simplemente hipnotizante. Mantener la humedad alta ha sido el secreto de su éxito.",
-    likes: 267,
-    comments: 15
+    commentsCount: 15
   }
 ];
 
@@ -111,8 +105,7 @@ const Index = () => {
       userAvatar: post.profiles?.avatar_url || "",
       plantImage: post.image_url,
       description: post.description || "",
-      likes: 0,
-      comments: 0,
+      commentsCount: 0,
     })),
     ...mockPosts,
   ];
